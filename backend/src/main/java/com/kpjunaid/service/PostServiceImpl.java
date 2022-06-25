@@ -380,12 +380,6 @@ public class PostServiceImpl implements PostService {
             postRepository.deleteById(postShareId);
 
             notificationService.deleteNotificationByOwningPost(targetPostShare);
-
-            notificationService.removeNotification(
-                    sharedPost.getAuthor(),
-                    sharedPost,
-                    NotificationType.POST_SHARE.name()
-            );
         } else {
             throw new InvalidOperationException();
         }
