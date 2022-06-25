@@ -1,5 +1,8 @@
 # Social-Networking-App-Using-Spring-Boot-And-Angular
 
+## Project Demo Video
+[![Alt text](https://img.youtube.com/vi/HMN8NCSm98s/0.jpg)](https://www.youtube.com/watch?v=HMN8NCSm98s)
+
 ## Project Features:
 
 - Users can create new account
