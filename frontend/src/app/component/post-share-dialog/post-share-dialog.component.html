@@ -1,0 +1,56 @@
+<mat-dialog-content>
+	<div class="position-relative">
+		<h2 class="mat-h2 m-0">
+			{{ dataPost.shareCount > 0 ? 'Shares(' + dataPost.shareCount + ')' : 'No Share' }}
+		</h2>
+		<hr class="divider" *ngIf="dataPost.shareCount > 0">
+	
+		<ul class="list-group">
+			<li class="list-group-item p-3" *ngFor="let postShareResponse of postShareResponseList">
+				<div class="rounded-circle d-inline-block align-middle centered-bg-image"
+					style="width: 35px; height: 35px; background-image: url('{{ postShareResponse.post.author.profilePhoto ? postShareResponse.post.author.profilePhoto : defaultProfilePhotoUrl }}');">
+				</div>
+				<div class="ps-5" style="margin-top: -38px;">
+					<a class="d-inline-block text-decoration-none text-dark align-middle fw-500 cursor-pointer"
+						 href="/users/{{ postShareResponse.post.author.id }}">{{ postShareResponse.post.author.firstName + ' ' +
+						 postShareResponse.post.author.lastName }}</a>
+					<br>
+					<span class="text-secondary d-inline-block">
+						<mat-icon class="align-middle w-auto h-auto" style="font-size: 16px;">watch_later</mat-icon>
+						<span class="align-middle ps-1 small fw-500">{{ postShareResponse.post.dateCreated | date:'medium' }}</span>
+					</span>
+	
+					<p class="pt-2">{{ postShareResponse.post.content }}</p>
+	
+					<a href="/posts/{{ postShareResponse.post.id }}" class="d-inline-block text-decoration-none fw-500 mb-3">View Post</a>
+
+					<mat-chip-list aria-label="Fish selection" class="">
+						<mat-chip class="me-3 cursor-pointer" style="padding: 4px 10px !important; min-height: 24px;" (click)="openPostLikeDialog(postShareResponse)">
+							Likes
+							<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+								{{ postShareResponse.post.likeCount }}
+							</span>
+						</mat-chip>
+					</mat-chip-list>
+	
+					<div style="margin-top: -40px; text-align: right">
+						<button mat-icon-button (click)="likeOrUnlikePostShare(postShareResponse.likedByAuthUser, postShareResponse)">
+							<mat-icon [ngClass]="postShareResponse.likedByAuthUser ? 'text-danger' : 'text-secondary'">favorite</mat-icon>
+						</button>
+					</div>
+				</div>
+			</li>
+		</ul>
+	
+		<div class="mt-4 mb-3 text-center" *ngIf="hasMoreResult">
+			<button mat-raised-button color="primary" class="rounded-pill align-middle" *ngIf="hasMoreResult && !(fetchingResult && resultPage > 1)" (click)="loadPostShares(resultPage)">Load More</button>
+			<div *ngIf="fetchingResult && resultPage > 1" class="d-inline-block" style="transform: scale(0.3); margin-top: -33px;">
+				<mat-spinner style="margin: 0 auto;"></mat-spinner>
+			</div>
+		</div>
+	
+		<div *ngIf="fetchingResult && resultPage === 1" class="position-absolute" style="transform: scale(0.3); top: -35px; right: -35px;">
+			<mat-spinner></mat-spinner>
+		</div>
+	</div>
+</mat-dialog-content>

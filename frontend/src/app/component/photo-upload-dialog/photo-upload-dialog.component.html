@@ -1,0 +1,27 @@
+<mat-dialog-content>
+	<h2 class="mat-h2 m-0">
+		{{ data.header }}
+	</h2>
+
+	<hr class="divider">
+
+	<div>
+		<div>
+			<img [src]="photoPreviewUrl" alt="" style="max-width: 100%; max-height: 300px;">
+		</div>
+		<div class="mt-3">
+			<input type="file" class="d-none visually-hidden" id="photoFile" (change)="previewPhoto($event)">
+			<label for="photoFile" matRipple class="d-inline-block cursor-pointer">
+				<button mat-stroked-button color="primary" style="pointer-events: none;">
+					<mat-icon>camera_alt</mat-icon>
+					Upload New Photo
+				</button>
+			</label>
+
+			<button mat-raised-button color="primary" class="float-end" (click)="savePhoto()">
+				Save Photo
+			</button>
+		</div>
+	</div>
+
+</mat-dialog-content>

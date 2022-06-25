@@ -1,0 +1,62 @@
+<mat-dialog-content>
+	<div class="position-relative">
+		<h2 class="mat-h2 m-0">
+			{{ dataPost ? 'Edit This Post' : 'Create New Post' }}
+		</h2>
+	
+		<hr class="divider">
+	
+		<form [formGroup]="postFormGroup" (ngSubmit)="handlePostSubmit()" class="position-relative"
+			enctype="multipart/form-data">
+			<mat-form-field appearance="outline" class="w-100" style="padding-right: 90px;">
+				<mat-label>What do you want to post?</mat-label>
+				<textarea matInput formControlName="content" placeholder="What do you want to post?" cdkTextareaAutosize
+					cdkAutosizeMinRows="2" cdkAutosizeMaxRows="10">
+				</textarea>
+				<mat-error *ngIf="content.hasError('maxlength')">
+					Cannot exceed 4096 characters
+				</mat-error>
+			</mat-form-field>
+	
+			<div *ngIf="postPhotoPreviewUrl" class="pb-3">
+				<img [src]="postPhotoPreviewUrl" alt="" style="max-width: 100%;">
+			</div>
+	
+			<div>
+				<div class="mb-3" *ngIf="postTags.length > 0">
+					<span class="badge rounded-pill text-dark fw-normal d-inline-block position-relative text-center m-2"
+					 style="font-size: 16px; background-color: rgba(0,0,0,0.1);" *ngFor="let tag of postTags" [ngClass]="tag.action === 'remove' ? 'd-none visually-hidden' : ''">
+						{{ tag.tagName }}
+						<span class="position-absolute top-0 start-100 translate-middle bg-danger fw-bold text-white rounded-circle text-center cursor-pointer"
+						 style="width: 20px; height: 20px; line-height: 20px;" matTooltip="Remove Tag" matTooltipPosition="above" (click)="removeTag(tag)">-</span>
+					</span>
+				</div>
+	
+				<input type="file" class="d-none visually-hidden" id="postPhotoFile" *ngIf="!dataPost || (dataPost && !dataPost.isTypeShare)" (change)="previewPostPhoto($event)">
+				
+				<label for="postPhotoFile" *ngIf="!dataPost || (dataPost && !dataPost.isTypeShare)">
+					<div class="border border-1 rounded-pill ps-3 pt-1 pe-3 pb-1 cursor-pointer">
+						<mat-icon class="align-middle">camera_alt</mat-icon>
+						<span class="align-middle fw-500 ps-2">
+							{{ (dataPost && dataPost.postPhoto) ? 'Update Photo' : 'Add Photo' }}
+						</span>
+					</div>
+				</label>
+	
+				<span class="fw-500 align-middle cursor-pointer text-danger d-inline-block ms-4" *ngIf="dataPost && dataPost.postPhoto" (click)="openPostPhotoDeleteConfirmDialog()">Delete Photo</span>
+				
+				<button mat-icon-button color="primary" matTooltip="Add New Tag" matTooltipPosition="left" class="float-end" (click)="openAddTagDialog($event)">
+					<mat-icon>style</mat-icon>
+				</button>
+			</div>
+			
+			<button mat-raised-button color="primary" type="submit" class="position-absolute" style="top: 4px; right: 0;">
+				{{ dataPost ? 'Update' : 'Post' }}
+			</button>
+		</form>
+	
+		<div *ngIf="creatingPost" class="position-absolute" style="transform: scale(0.3); top: -35px; right: -35px;">
+			<mat-spinner></mat-spinner>
+		</div>
+	</div>
+</mat-dialog-content>

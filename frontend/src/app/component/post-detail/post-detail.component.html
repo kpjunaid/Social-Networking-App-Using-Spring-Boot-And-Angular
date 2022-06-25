@@ -1,0 +1,11 @@
+<div class="text-center fully-centered" *ngIf="fetchingResult">
+	<mat-spinner style="zoom: 0.5;" class="text-center ms-auto me-auto"></mat-spinner>
+</div>
+
+<div class="container" *ngIf="!fetchingResult">
+	<div class="row justify-content-center">
+		<div class="col-6 mb-4" style="margin-top: 110px;">
+			<app-post [postResponse]="postResponse" [isDetailedPost]="true"></app-post>
+		</div>
+	</div>
+</div>

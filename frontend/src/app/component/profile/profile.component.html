@@ -1,0 +1,142 @@
+<div class="text-center fully-centered" *ngIf="loadingProfile">
+	<mat-spinner style="zoom: 0.5;" class="text-center ms-auto me-auto"></mat-spinner>
+</div>
+
+<div class="profile-header" style="margin-top: 64px" *ngIf="!loadingProfile">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-10">
+				<div class="profile-cover-photo centered-bg-image mat-elevation-z5 cursor-pointer" (click)="openViewPhotoDialog(profileUser.coverPhoto)"
+					style="height: 300px; background-image: url('{{profileUser.coverPhoto}}')">
+					<div align="end" class="float-end" style="margin-top: 10px; margin-right: 10px" *ngIf="isProfileViewerOwner" (click)="openPhotoUploadDialog($event, 'coverPhoto')">
+						<button mat-mini-fab color="basic">
+							<mat-icon class="text-secondary">upload</mat-icon>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row justify-content-center">
+			<div class="col-10">
+				<div class=" bg-white position-relative p-5 mat-elevation-z3 rounded-bottom">
+					<div class="profile-picture centered-bg-image d-inline-block border border-5 border-white rounded-3 cursor-pointer mat-elevation-z3 p-0"  (click)="openViewPhotoDialog(profileUser.profilePhoto)"
+						style="margin-top: -100px; height: 180px; width: 180px; background-color: white; background-image: url('{{profileUser.profilePhoto}}');">
+						<div align="end" class="float-end" style="margin-top: -20px; margin-right: -20px" *ngIf="isProfileViewerOwner"  (click)="openPhotoUploadDialog($event, 'profilePhoto')">
+							<button mat-mini-fab color="basic">
+								<mat-icon class="text-secondary">upload</mat-icon>
+							</button>
+						</div>
+					</div>
+
+					<div class="profile-info d-inline-block align-top ps-3" style="margin-top: -30px">
+						<h1 class="mat-display-1 mb-3" style="font-weight: 500;">
+							{{ profileUser.firstName + ' ' + profileUser.lastName }}
+						</h1>
+
+						<p>
+							<a class="text-decoration-none text-secondary mat-h3 cursor-pointer" style="font-weight: 500;" (click)="openFollowingDialog(profileUser)">
+								{{ profileUser.followingCount }} Following
+							</a>
+							<span class="ps-2 pe-2 mat-h3 fw-bold">|</span>
+							<a class="text-decoration-none text-secondary mat-h3 cursor-pointer" style="font-weight: 500;" (click)="openFollowerDialog(profileUser)">
+								{{ profileUser.followerCount }} Follower
+							</a>
+						</p>
+					</div>
+
+					<div style="position: absolute; right: 30px; top: 30px;" *ngIf="!isProfileViewerOwner">
+						<button mat-raised-button color="primary" *ngIf="!viewerFollowsProfileUser" (click)="openFollowConfirmDialog(profileUser.id)">Follow</button>
+						<button mat-raised-button color="warn" *ngIf="viewerFollowsProfileUser" (click)="openUnfollowConfirmDialog(profileUser.id)">Unfollow</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row justify-content-center mt-5">
+			<div class="col-4">
+				<div class="profile-sidebar position-sticky bg-white rounded mat-elevation-z3 p-3 mb-5" style="top: 64px;">
+					<p class="text-center ps-2 pt-3 pe-2 pb-0" *ngIf="profileUser.intro">
+						{{ profileUser.intro }}
+					</p>
+
+					<mat-list>
+						<div *ngIf="profileUser.email">
+							<mat-list-item>
+								<mat-icon class="text-secondary">email</mat-icon>
+								<span class="fw-500 ps-3 small">Email <b>{{ profileUser.email }}</b></span>
+							</mat-list-item>
+						</div>
+
+						<div *ngIf="profileUser.workplace">
+							<mat-divider></mat-divider>
+
+							<mat-list-item>
+								<mat-icon class="text-secondary">work</mat-icon>
+								<span class="fw-500 ps-3 small">Works At <b>{{ profileUser.workplace }}</b></span>
+							</mat-list-item>
+	
+							<mat-divider></mat-divider>
+						</div>
+
+						<div *ngIf="profileUser.eduInstitution">
+							<mat-list-item>
+								<mat-icon class="text-secondary">school</mat-icon>
+								<span class="fw-500 ps-3 small">Studied At <b>{{ profileUser.eduInstitution }}</b></span>
+							</mat-list-item>
+	
+							<mat-divider></mat-divider>
+						</div>
+
+						<div *ngIf="profileUser.hometown">
+							<mat-list-item *ngIf="profileUser.hometown">
+								<mat-icon class="text-secondary">home</mat-icon>
+								<span class="fw-500 ps-3 small">From <b>{{ profileUser.hometown }}</b></span>
+							</mat-list-item>
+	
+							<mat-divider></mat-divider>
+						</div>
+
+						<div *ngIf="profileUser.currentCity">
+							<mat-list-item>
+								<mat-icon class="text-secondary">person_pin_circle</mat-icon>
+								<span class="fw-500 ps-3 small">Lives In <b>{{ profileUser.currentCity}}</b></span>
+							</mat-list-item>
+	
+							<mat-divider></mat-divider>
+						</div>
+						
+						<div *ngIf="profileUser.country">
+							<mat-list-item>
+								<mat-icon class="text-secondary">place</mat-icon>
+								<span class="fw-500 ps-3 small">Country <b>{{ profileUser.country.name }}</b></span>
+							</mat-list-item>
+	
+							<mat-divider></mat-divider>
+						</div>
+						
+						<div *ngIf="profileUser.gender">
+							<mat-list-item>
+								<mat-icon class="text-secondary"><mat-icon>account_circle</mat-icon></mat-icon>
+								<span class="fw-500 ps-3 small">Gender <b>{{ profileUser.gender }}</b></span>
+							</mat-list-item>
+						</div>
+					</mat-list>
+				</div>
+			</div>
+
+			<div class="col-6 mb-4">
+				<div class="profile-posts">
+					<app-post *ngFor="let postResponse of profileUserPostResponses" id="{{'profilePost' + postResponse.post.id}}" [postResponse]="postResponse" [isDetailedPost]="false" (postDeletedEvent)="handlePostDeletedEvent($event)"></app-post>
+				</div>
+
+				<div class="text-center mt-3">
+					<button mat-raised-button color="primary" class="mat-btn-lg rounded-pill" *ngIf="hasMoreResult && !fetchingResult" (click)="loadProfilePosts(resultPage)">Load More</button>
+					<mat-spinner style="transform: scale(0.3);" class="text-center ms-auto me-auto" *ngIf="fetchingResult"></mat-spinner>
+					<span class="fw-500" *ngIf="hasNoPost">No Post</span>
+					<span class="fw-500" *ngIf="!hasMoreResult && !hasNoPost">No More Posts</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

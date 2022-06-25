@@ -1,0 +1,79 @@
+<div class="mt-100 me-auto ms-auto pb-5" style="width: 500px;">
+	<mat-card class="mat-elevation-z3">
+		<mat-card-title class="text-center ps-3 pt-5 pe-3">Create A New Account</mat-card-title>
+
+		<mat-card-content class="p-4">
+			<form [formGroup]="signupFormGroup" (ngSubmit)="handleSignup()">
+				<mat-form-field class="w-100 pb-2" appearance="outline" formGroupName="infoGroup">
+					<mat-label>First Name</mat-label>
+					<input type="text" matInput formControlName="firstName" placeholder="Ex. John">
+					<mat-error *ngIf="firstName.hasError('required')">
+						First Name is <b>required</b>
+					</mat-error>
+					<mat-error *ngIf="firstName.hasError('maxlength') || firstName.hasError('serverError')">
+						Your first name must be within 64 characters
+					</mat-error>
+				</mat-form-field>
+
+				<mat-form-field class="w-100 pb-2" appearance="outline" formGroupName="infoGroup">
+					<mat-label>Last Name</mat-label>
+					<input type="text" matInput formControlName="lastName" placeholder="Ex. Doe">
+					<mat-error *ngIf="lastName.hasError('required')">
+						Last Name is <b>required</b>
+					</mat-error>
+					<mat-error *ngIf="lastName.hasError('maxlength') || lastName.hasError('serverError')">
+						Your last name must be within 64 characters
+					</mat-error>
+				</mat-form-field>
+
+				<mat-form-field class="w-100 pb-2" appearance="outline" formGroupName="infoGroup">
+					<mat-label>Email</mat-label>
+					<input type="text" matInput formControlName="email" placeholder="Ex. johndoe@example.com">
+					<mat-error *ngIf="email.hasError('required')">
+						Email is <b>required</b>
+					</mat-error>
+					<mat-error *ngIf="email.hasError('email') || email.hasError('serverError')">
+						Please, enter a valid email address
+					</mat-error>
+				</mat-form-field>
+
+				<mat-form-field class="w-100 pb-2" appearance="outline" formGroupName="passwordGroup">
+					<mat-label>Password</mat-label>
+					<input type="password" matInput formControlName="password" placeholder="*************">
+					<mat-error *ngIf="password.hasError('required')">
+						Password is <b>required</b>
+					</mat-error>
+					<mat-error *ngIf="password.hasError('minlength', 'maxlength')">
+						Password must be 6 to 32 characters long
+					</mat-error>
+					<mat-error *ngIf="password.hasError('serverError')">
+						Password has to be alpha numeric and must include uppercase, lowercase, and special characters
+					</mat-error>
+				</mat-form-field>
+
+				<mat-form-field class="w-100 pb-2" appearance="outline" formGroupName="passwordGroup">
+					<mat-label>Repeat Password</mat-label>
+					<input type="password" matInput formControlName="passwordRepeat" placeholder="*************" [errorStateMatcher]="repeatPasswordMatcher">
+					<mat-error *ngIf="passwordRepeat.hasError('required')">
+						Password Repeat is <b>required</b>
+					</mat-error>
+					<mat-error *ngIf="signupFormGroup.hasError('passwordMissMatch') || passwordRepeat.hasError('serverError')">
+						Password did not match
+					</mat-error>
+				</mat-form-field>
+
+				<a routerLink="/login" class="d-inline-block text-secondary text-decoration-none mt-3">
+					I already have an account.
+				</a>
+
+				<mat-card-actions align="end" style="margin-top: -35px; padding-right: 8px;">
+					<button mat-raised-button color="primary" type="submit">Signup</button>
+				</mat-card-actions>
+			</form>
+		</mat-card-content>
+
+		<mat-card-footer *ngIf="submittingForm == true">
+			<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+		</mat-card-footer>
+	</mat-card>
+</div>

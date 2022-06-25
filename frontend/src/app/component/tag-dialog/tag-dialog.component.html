@@ -1,0 +1,24 @@
+<mat-dialog-content >
+	<div class="position-relative">
+		<h2 class="mat-h2 m-0">
+			Add A Tag
+		</h2>
+	
+		<hr class="divider">
+	
+		<form [formGroup]="tagFormGroup" class="position-relative" autocomplete="off" (ngSubmit)="addTag($event)">
+			<mat-form-field appearance="outline" class="w-100" style="padding-right: 90px;">
+				<mat-label>Type a tag name</mat-label>
+				<input matInput formControlName="name" placeholder="Type a tag name">
+				<mat-error *ngIf="name.hasError('minlength') || name.hasError('maxlength')">
+					Must be 3 to 64 characters
+				</mat-error>
+			</mat-form-field>
+
+			<button mat-raised-button color="primary" type="submit" class="position-absolute" style="top: 4px; right: 0;">
+				Add
+			</button>
+		</form>
+	</div>
+
+</mat-dialog-content>

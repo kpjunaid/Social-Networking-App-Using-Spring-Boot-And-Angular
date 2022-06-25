@@ -1,0 +1,138 @@
+<mat-card class="position-relative mat-elevation-z3 mb-4" *ngIf="postResponse">
+	<mat-card-header>
+		<div mat-card-avatar class="centered-bg-image"
+			style="background-image: url('{{ postResponse.post.author.profilePhoto ? postResponse.post.author.profilePhoto : defaultProfilePhotoUrl }}');">
+		</div>
+		<mat-card-title>
+			<a href="/users/{{ postResponse.post.author.id }}" class="text-decoration-none text-dark">
+				{{ postResponse.post.author.firstName + ' ' + postResponse.post.author.lastName }}
+			</a>
+		</mat-card-title>
+		<mat-card-subtitle>
+			<mat-icon class="align-middle w-auto h-auto" style="font-size: 16px;">watch_later</mat-icon>
+			<span class="align-middle ps-1 small fw-500">{{ postResponse.post.dateCreated | date:'medium' }}</span>
+		</mat-card-subtitle>
+	</mat-card-header>
+
+	<div align="end" style="position: absolute; top: 10px; right: 10px"
+		*ngIf="postResponse.post.author.id === authUserId">
+		<button mat-icon-button [matMenuTriggerFor]="coverPhotoMenu">
+			<mat-icon>more_vert</mat-icon>
+		</button>
+		<mat-menu #coverPhotoMenu="matMenu">
+			<button mat-menu-item (click)="openPostEditDialog()">
+				<mat-icon>edit</mat-icon>
+				Edit Post
+			</button>
+			<button mat-menu-item (click)="openPostDeleteConfirmDialog()">
+				<mat-icon>delete_sweep</mat-icon>
+				Delete Post
+			</button>
+		</mat-menu>
+	</div>
+
+	<img *ngIf="postResponse.post.postPhoto" mat-card-image src="{{ postResponse.post.postPhoto }}" alt="">
+
+	<mat-card-content class="mb-4">
+		<p class="p-2" *ngIf="isDetailedPost && postResponse.post.content.length > 0">
+			{{ postResponse.post.content }}
+		</p>
+
+		<p class="p-2" *ngIf="!isDetailedPost && postResponse.post.content.length > 0">
+			{{ postResponse.post.content.length > 128 ? (postResponse.post.content | slice:0:128) + '...' :
+			postResponse.post.content }}
+		</p>
+
+		<a class="text-decoration-none fw-500" href="/posts/{{postResponse.post.id}}"
+			*ngIf="!isDetailedPost && postResponse.post.content.length > 128">
+			View Full Post
+		</a>
+
+		<div *ngIf="postResponse.post.postTags.length > 0">
+			<a *ngFor="let tag of postResponse.post.postTags" href="/posts/tags/{{ tag.name }}"
+			 class="text-decoration-none d-inline-block ms-0 mt-2 me-2 mb-0">#{{ tag.name }}</a>
+		</div>	
+
+		<div *ngIf="postResponse.post.isTypeShare" class="mt-3 p-3 border border-1 rounded">
+			<div *ngIf="!postResponse.post.sharedPost">
+				<span class="badge rounded-pill bg-secondary">Shared post has been deleted</span>
+			</div>
+
+			<div *ngIf="postResponse.post.sharedPost">
+				<div class="rounded-circle d-inline-block align-middle centered-bg-image"
+					style="width: 35px; height: 35px; background-image: url('{{postResponse.post.sharedPost.author.profilePhoto ? postResponse.post.sharedPost.author.profilePhoto : defaultProfilePhotoUrl}}');">
+				</div>
+
+				<div class="ps-5" style="margin-top: -38px;">
+					<a class="d-inline-block text-decoration-none text-dark align-middle fw-500 cursor-pointer"
+						href="/users/{{ postResponse.post.sharedPost.author.id }}">
+						{{ postResponse.post.sharedPost.author.firstName + ' ' + postResponse.post.sharedPost.author.lastName }}
+					</a>
+
+					<br>
+
+					<span class="text-secondary d-inline-block">
+						<mat-icon class="align-middle w-auto h-auto" style="font-size: 16px;">watch_later</mat-icon>
+						<span class="align-middle ps-1 small fw-500">
+							{{ postResponse.post.sharedPost.dateCreated | date:'medium' }}
+						</span>
+					</span>
+
+					<div>
+						<img class="mt-3" style="max-width: 100%;" *ngIf="postResponse.post.sharedPost.postPhoto"
+							mat-card-image src="{{ postResponse.post.sharedPost.postPhoto }}" alt="">
+					</div>
+
+					<p class="pt-2" *ngIf="postResponse.post.sharedPost.content.length > 0">{{
+						postResponse.post.sharedPost.content.length > 128 ? (postResponse.post.sharedPost.content |
+						slice:0:128) + '...' : postResponse.post.sharedPost.content }}</p>
+
+					<a class="text-decoration-none fw-500" href="/posts/{{postResponse.post.sharedPost.id}}">View Shared
+						Post
+					</a>
+				</div>
+			</div>
+		</div>
+
+	</mat-card-content>
+
+	<hr class="divider mb-4">
+
+	<mat-chip-list>
+		<mat-chip class="me-3 cursor-pointer"
+			style="padding: 4px 10px !important; min-height: 28px;" (click)="openLikeDialog()">
+			Likes
+			<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+				{{ postResponse.post.likeCount }}
+			</span>
+		</mat-chip>
+
+		<mat-chip class="me-3 cursor-pointer"
+			style="padding: 4px 10px !important; min-height: 28px;" (click)="openCommentDialog()">
+			Comments
+			<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+				{{ postResponse.post.commentCount }}
+			</span>
+		</mat-chip>
+
+		<mat-chip class="cursor-pointer"
+			*ngIf="!postResponse.post.isTypeShare" style="padding: 4px 10px !important; min-height: 28px;"
+			(click)="openShareDialog()">
+			Shares
+			<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+				{{ postResponse.post.shareCount }}
+			</span>
+		</mat-chip>
+	</mat-chip-list>
+
+	<mat-card-actions align="end" style="margin-top: -50px !important; padding-bottom: 20px;">
+		<button class="me-2" mat-icon-button matTooltip="{{postResponse.likedByAuthUser ? 'Unlike' : 'Like'}}"
+			(click)="likeOrUnlikePost(postResponse.likedByAuthUser)">
+			<mat-icon [ngClass]="postResponse.likedByAuthUser ? 'text-danger' : 'text-secondary'">favorite</mat-icon>
+		</button>
+
+		<button mat-icon-button matTooltip="Share" *ngIf="!postResponse.post.isTypeShare || postResponse.post.sharedPost" (click)="openShareConfirmDialog()">
+			<mat-icon class="text-secondary">share</mat-icon>
+		</button>
+	</mat-card-actions>
+</mat-card>

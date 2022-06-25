@@ -1,0 +1,28 @@
+<mat-dialog-content>
+	<div class="position-relative">
+		<h2 class="mat-h2 m-0">
+			{{ dataPost.likeCount > 0 ? 'Likes(' + dataPost.likeCount + ')' : 'No Like' }}
+		</h2>
+		<hr class="divider" *ngIf="dataPost.likeCount > 0">
+		<ul class="list-group list-group-flush" *ngFor="let like of likeList">
+			<li class="list-group-item ps-0 pt-2 pe-0 pb-2">
+				<span class="rounded-circle d-inline-block align-middle centered-bg-image"
+					style="width: 30px; height: 30px; background-image: url('{{like.profilePhoto ? like.profilePhoto : defaultProfilePhotoUrl}}');">
+				</span>
+				<a class="d-inline-block text-decoration-none text-dark align-middle ps-2 fw-500 cursor-pointer"
+					href="/users/{{like.id}}">{{like.firstName + ' ' + like.lastName}}</a>
+			</li>
+		</ul>
+
+		<div class="mt-3 mb-3 text-center" *ngIf="hasMoreResult">
+			<button mat-raised-button color="primary" class="rounded-pill align-middle" *ngIf="hasMoreResult && !(fetchingResult && resultPage > 1)" (click)="loadLikes(resultPage)">Load More</button>
+			<div *ngIf="fetchingResult && resultPage > 1" class="d-inline-block" style="transform: scale(0.3); margin-top: -33px;">
+				<mat-spinner style="margin: 0 auto;"></mat-spinner>
+			</div>
+		</div>
+	
+		<div *ngIf="fetchingResult && resultPage === 1" class="position-absolute" style="transform: scale(0.3); top: -35px; right: -35px;">
+			<mat-spinner></mat-spinner>
+		</div>
+	</div>
+</mat-dialog-content>

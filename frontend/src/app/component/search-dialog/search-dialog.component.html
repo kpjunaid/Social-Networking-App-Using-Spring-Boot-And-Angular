@@ -1,0 +1,56 @@
+<mat-dialog-content >
+	<div class="position-relative">
+		<h2 class="mat-h2 m-0">
+			Find Someone
+		</h2>
+	
+		<hr class="divider">
+	
+		<form [formGroup]="searchUserFormGroup" class="position-relative" autocomplete="off" (ngSubmit)="searchUser(1)">
+			<mat-form-field appearance="outline" class="w-100" style="padding-right: 90px;">
+				<mat-label>Who do you want to find?</mat-label>
+				<input matInput formControlName="key" placeholder="Who do you want to find?">
+				<mat-error *ngIf="key.hasError('minlength') || key.hasError('maxlength')">
+					Must be 3 to 64 characters
+				</mat-error>
+			</mat-form-field>
+
+			<button mat-raised-button color="primary" type="submit" class="position-absolute"
+			style="top: 4px; right: 0;">Search</button>
+		</form>
+	
+		<div *ngIf="!noResult">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item ps-0 pt-2 pe-0 pb-2 border border-1 border-start-0 border-bottom-0 border-end-0" *ngFor="let userResponse of searchResult">
+					<span class="rounded-circle d-inline-block align-middle centered-bg-image"
+						style="width: 35px; height: 35px; background-image: url('{{userResponse.user.profilePhoto ? userResponse.user.profilePhoto : defaultProfilePhotoUrl}}');">
+					</span>
+
+					<a class="d-inline-block text-decoration-none text-dark align-middle ps-2 fw-500 cursor-pointer"
+						href="/users/{{userResponse.user.id}}">{{userResponse.user.firstName + ' ' + userResponse.user.lastName}}</a>
+					
+					<button mat-stroked-button color="primary" class="float-end rounded-pill" *ngIf="!userResponse.followedByAuthUser" (click)="openFollowConfirmDialog(userResponse)">Follow</button>
+					<button mat-stroked-button color="warn" class="float-end rounded-pill" *ngIf="userResponse.followedByAuthUser" (click)="openUnfollowConfirmDialog(userResponse)">Unfollow</button>
+				</li>
+
+				<span class="d-block border border-1 border-start-0 border-top-0 border-end-0" *ngIf="searchResult.length > 0"></span>
+			</ul>
+
+			<div class="mt-3 mb-3" *ngIf="hasMoreResult">
+				<button mat-raised-button color="primary" class="rounded-pill align-middle" *ngIf="hasMoreResult" (click)="searchUser(resultPage)">Load More</button>
+				<div *ngIf="fetchingResult && resultPage > 1" class="d-inline-block float-end" style="transform: scale(0.3); margin-top: -33px;">
+					<mat-spinner style="margin: 0 auto;"></mat-spinner>
+				</div>
+			</div>
+		</div>
+
+		<div *ngIf="noResult" class="text-center">
+			No user found.
+		</div>
+	
+		<div *ngIf="fetchingResult && resultPage === 1" class="position-absolute" style="transform: scale(0.3); top: -35px; right: -35px;">
+			<mat-spinner></mat-spinner>
+		</div>
+	</div>
+
+</mat-dialog-content>
