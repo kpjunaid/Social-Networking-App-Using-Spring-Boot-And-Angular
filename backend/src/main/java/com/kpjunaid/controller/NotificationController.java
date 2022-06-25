@@ -17,10 +17,7 @@ public class NotificationController {
 
     @GetMapping("/notifications")
     public ResponseEntity<?> getNotifications(@RequestParam("page") Integer page,
-                                              @RequestParam("size") Integer size) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                              @RequestParam("size") Integer size) {
         page = page < 0 ? 0 : page-1;
         size = size <= 0 ? 5 : size;
         List<Notification> notifications = notificationService.getNotificationsForAuthUserPaginate(page, size);
@@ -28,19 +25,13 @@ public class NotificationController {
     }
 
     @PostMapping("/notifications/mark-seen")
-    public ResponseEntity<?> markAllSeen() throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> markAllSeen() {
         notificationService.markAllSeen();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/notifications/mark-read")
-    public ResponseEntity<?> markAllRead() throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> markAllRead() {
         notificationService.markAllRead();
         return new ResponseEntity<>(HttpStatus.OK);
     }

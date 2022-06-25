@@ -32,18 +32,13 @@ public class UserController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody @Valid SignupDto signupDto) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> signup(@RequestBody @Valid SignupDto signupDto) {
         User savedUser = userService.createNewUser(signupDto);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid LoginDto loginDto) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
+    public ResponseEntity<?> login(@RequestBody @Valid LoginDto loginDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getEmail(), loginDto.getPassword())
         );
@@ -55,82 +50,55 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<?> showUserProfile(Authentication authentication) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> showUserProfile(Authentication authentication) {
         User user = userService.getUserByEmail(authentication.getPrincipal().toString());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PostMapping("/account/update/info")
-    public ResponseEntity<?> updateUserInfo(@RequestBody @Valid UpdateUserInfoDto updateUserInfoDto) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> updateUserInfo(@RequestBody @Valid UpdateUserInfoDto updateUserInfoDto) {
         User updatedUser = userService.updateUserInfo(updateUserInfoDto);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @PostMapping("/account/update/email")
-    public ResponseEntity<?> updateUserEmail(@RequestBody @Valid UpdateEmailDto updateEmailDto) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> updateUserEmail(@RequestBody @Valid UpdateEmailDto updateEmailDto) {
         userService.updateEmail(updateEmailDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/account/update/password")
-    public ResponseEntity<?> updateUserPassword(@RequestBody @Valid UpdatePasswordDto updatePasswordDto) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> updateUserPassword(@RequestBody @Valid UpdatePasswordDto updatePasswordDto) {
         userService.updatePassword(updatePasswordDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/account/update/profile-photo")
-    public ResponseEntity<?> updateProfilePhoto(@RequestParam("profilePhoto") MultipartFile profilePhoto) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> updateProfilePhoto(@RequestParam("profilePhoto") MultipartFile profilePhoto) {
         User updatedUser = userService.updateProfilePhoto(profilePhoto);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @PostMapping("/account/update/cover-photo")
-    public ResponseEntity<?> updateCoverPhoto(@RequestParam("coverPhoto") MultipartFile coverPhoto) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> updateCoverPhoto(@RequestParam("coverPhoto") MultipartFile coverPhoto) {
         User updatedUser = userService.updateCoverPhoto(coverPhoto);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     @PostMapping("/account/delete")
-    public ResponseEntity<?> deleteUserAccount() throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> deleteUserAccount() {
         userService.deleteUserAccount();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/account/follow/{userId}")
-    public ResponseEntity<?> followUser(@PathVariable("userId") Long userId) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> followUser(@PathVariable("userId") Long userId) {
         userService.followUser(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/account/unfollow/{userId}")
-    public ResponseEntity<?> unfollowUser(@PathVariable("userId") Long userId) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> unfollowUser(@PathVariable("userId") Long userId) {
         userService.unfollowUser(userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -138,10 +106,7 @@ public class UserController {
     @GetMapping("/users/{userId}/following")
     public ResponseEntity<?> getUserFollowingUsers(@PathVariable("userId") Long userId,
                                                   @RequestParam("page") Integer page,
-                                                  @RequestParam("size") Integer size) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                                  @RequestParam("size") Integer size) {
         page = page < 0 ? 0 : page-1;
         size = size <= 0 ? 5 : size;
         List<UserResponse> followingList = userService.getFollowingUsersPaginate(userId, page, size);
@@ -151,10 +116,7 @@ public class UserController {
     @GetMapping("/users/{userId}/follower")
     public ResponseEntity<?> getUserFollowerUsers(@PathVariable("userId") Long userId,
                                                  @RequestParam("page") Integer page,
-                                                 @RequestParam("size") Integer size) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                                 @RequestParam("size") Integer size) {
         page = page < 0 ? 0 : page-1;
         size = size <= 0 ? 5 : size;
         List<UserResponse> followingList = userService.getFollowerUsersPaginate(userId, page, size);
@@ -162,10 +124,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<?> getUserById(@PathVariable("userId") Long userId) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> getUserById(@PathVariable("userId") Long userId) {
         User authUser = userService.getAuthenticatedUser();
         User targetUser = userService.getUserById(userId);
         UserResponse userResponse = UserResponse.builder()
@@ -178,10 +137,7 @@ public class UserController {
     @GetMapping("/users/{userId}/posts")
     public ResponseEntity<?> getUserPosts(@PathVariable("userId") Long userId,
                                           @RequestParam("page") Integer page,
-                                          @RequestParam("size") Integer size) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                          @RequestParam("size") Integer size) {
         page = page < 0 ? 0 : page-1;
         size = size <= 0 ? 5 : size;
         User targetUser = userService.getUserById(userId);
@@ -192,10 +148,7 @@ public class UserController {
     @GetMapping("/users/search")
     public ResponseEntity<?> searchUser(@RequestParam("key") String key,
                                         @RequestParam("page") Integer page,
-                                        @RequestParam("size") Integer size) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                        @RequestParam("size") Integer size) {
         page = page < 0 ? 0 : page-1;
         size = size <= 0 ? 5 : size;
         List<UserResponse> userSearchResult = userService.getUserSearchResult(key, page, size);
@@ -203,29 +156,20 @@ public class UserController {
     }
 
     @PostMapping("/verify-email/{token}")
-    public ResponseEntity<?> verifyEmail(@PathVariable("token") String token) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> verifyEmail(@PathVariable("token") String token) {
         userService.verifyEmail(token);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestParam("email") String email) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> forgotPassword(@RequestParam("email") String email) {
         userService.forgotPassword(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/reset-password/{token}")
     public ResponseEntity<?> resetPassword(@RequestBody @Valid ResetPasswordDto resetPasswordDto,
-                                           @PathVariable("token") String token) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                           @PathVariable("token") String token) {
         userService.resetPassword(token, resetPasswordDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

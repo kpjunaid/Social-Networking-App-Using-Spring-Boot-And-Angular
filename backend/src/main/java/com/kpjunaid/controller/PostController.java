@@ -36,10 +36,7 @@ public class PostController {
     @PostMapping("/posts/create")
     public ResponseEntity<?> createNewPost(@RequestParam(value = "content", required = false) Optional<String> content,
                                            @RequestParam(name = "postPhoto", required = false) Optional<MultipartFile> postPhoto,
-                                           @RequestParam(name = "postTags", required = false) Optional<String> postTags) throws JsonProcessingException, InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                           @RequestParam(name = "postTags", required = false) Optional<String> postTags) throws JsonProcessingException {
         if ((content.isEmpty() || content.get().length() <= 0) &&
                 (postPhoto.isEmpty() || postPhoto.get().getSize() <= 0)) {
             throw new EmptyPostException();
@@ -60,10 +57,7 @@ public class PostController {
     public ResponseEntity<?> updatePost(@PathVariable("postId") Long postId,
                                         @RequestParam(value = "content", required = false) Optional<String> content,
                                         @RequestParam(name = "postPhoto", required = false) Optional<MultipartFile> postPhoto,
-                                        @RequestParam(name = "postTags", required = false) Optional<String> postTags) throws JsonProcessingException, InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                        @RequestParam(name = "postTags", required = false) Optional<String> postTags) throws JsonProcessingException {
         if ((content.isEmpty() || content.get().length() <= 0) &&
                 (postPhoto.isEmpty() || postPhoto.get().getSize() <= 0)) {
             throw new EmptyPostException();
@@ -81,28 +75,19 @@ public class PostController {
     }
 
     @PostMapping("/posts/{postId}/delete")
-    public ResponseEntity<?> deletePost(@PathVariable("postId") Long postId) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> deletePost(@PathVariable("postId") Long postId) {
         postService.deletePost(postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/posts/{postId}/photo/delete")
-    public ResponseEntity<?> deletePostPhoto(@PathVariable("postId") Long postId) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> deletePostPhoto(@PathVariable("postId") Long postId) {
         postService.deletePostPhoto(postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<?> getPostById(@PathVariable("postId") Long postId) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> getPostById(@PathVariable("postId") Long postId) {
         PostResponse foundPostResponse = postService.getPostResponseById(postId);
         return new ResponseEntity<>(foundPostResponse, HttpStatus.OK);
     }
@@ -110,10 +95,7 @@ public class PostController {
     @GetMapping("/posts/{postId}/likes")
     public ResponseEntity<?> getPostLikes(@PathVariable("postId") Long postId,
                                           @RequestParam("page") Integer page,
-                                          @RequestParam("size") Integer size) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                          @RequestParam("size") Integer size) {
         page = page < 0 ? 0 : page-1;
         size = size <= 0 ? 5 : size;
         Post targetPost = postService.getPostById(postId);
@@ -124,10 +106,7 @@ public class PostController {
     @GetMapping("/posts/{postId}/shares")
     public ResponseEntity<?> getPostShares(@PathVariable("postId") Long postId,
                                            @RequestParam("page") Integer page,
-                                           @RequestParam("size") Integer size) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                           @RequestParam("size") Integer size) {
         page = page < 0 ? 0 : page-1;
         size = size <= 0 ? 5 : size;
         Post sharedPost = postService.getPostById(postId);
@@ -136,13 +115,13 @@ public class PostController {
     }
 
     @PostMapping("/posts/{postId}/like")
-    public ResponseEntity<?> likePost(@PathVariable("postId") Long postId) throws InterruptedException {
+    public ResponseEntity<?> likePost(@PathVariable("postId") Long postId) {
         postService.likePost(postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/posts/{postId}/unlike")
-    public ResponseEntity<?> unlikePost(@PathVariable("postId") Long postId) throws InterruptedException {
+    public ResponseEntity<?> unlikePost(@PathVariable("postId") Long postId) {
         postService.unlikePost(postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -150,10 +129,7 @@ public class PostController {
     @GetMapping("/posts/{postId}/comments")
     public ResponseEntity<?> getPostComments(@PathVariable("postId") Long postId,
                                              @RequestParam("page") Integer page,
-                                             @RequestParam("size") Integer size) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                             @RequestParam("size") Integer size) {
         page = page < 0 ? 0 : page-1;
         size = size <= 0 ? 5 : size;
         Post targetPost = postService.getPostById(postId);
@@ -163,10 +139,7 @@ public class PostController {
 
     @PostMapping("/posts/{postId}/comments/create")
     public ResponseEntity<?> createPostComment(@PathVariable("postId") Long postId,
-                                               @RequestParam(value = "content") String content) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                               @RequestParam(value = "content") String content) {
         Comment savedComment = postService.createPostComment(postId, content);
         CommentResponse commentResponse = CommentResponse.builder()
                 .comment(savedComment)
@@ -178,20 +151,14 @@ public class PostController {
     @PostMapping("/posts/{postId}/comments/{commentId}/update")
     public ResponseEntity<?> updatePostComment(@PathVariable("commentId") Long commentId,
                                                @PathVariable("postId") Long postId,
-                                               @RequestParam(value = "content") String content) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                               @RequestParam(value = "content") String content) {
         Comment savedComment = postService.updatePostComment(commentId, postId, content);
         return new ResponseEntity<>(savedComment, HttpStatus.OK);
     }
 
     @PostMapping("/posts/{postId}/comments/{commentId}/delete")
     public ResponseEntity<?> deletePostComment(@PathVariable("commentId") Long commentId,
-                                               @PathVariable("postId") Long postId) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                               @PathVariable("postId") Long postId) {
         postService.deletePostComment(commentId, postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -211,10 +178,7 @@ public class PostController {
     @GetMapping("/posts/comments/{commentId}/likes")
     public ResponseEntity<?> getCommentLikeList(@PathVariable("commentId") Long commentId,
                                                 @RequestParam("page") Integer page,
-                                                @RequestParam("size") Integer size) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                                @RequestParam("size") Integer size) {
         page = page < 0 ? 0 : page-1;
         size = size <= 0 ? 5 : size;
         Comment targetComment = commentService.getCommentById(commentId);
@@ -224,10 +188,7 @@ public class PostController {
 
     @PostMapping("/posts/{postId}/share/create")
     public ResponseEntity<?> createPostShare(@PathVariable("postId") Long postId,
-                                             @RequestParam(value = "content", required = false) Optional<String> content) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                             @RequestParam(value = "content", required = false) Optional<String> content) {
         String contentToAdd = content.isEmpty() ? null : content.get();
         Post postShare = postService.createPostShare(contentToAdd, postId);
         return new ResponseEntity<>(postShare, HttpStatus.OK);
@@ -235,20 +196,14 @@ public class PostController {
 
     @PostMapping("/posts/{postShareId}/share/update")
     public ResponseEntity<?> updatePostShare(@PathVariable("postShareId") Long postShareId,
-                                             @RequestParam(value = "content", required = false) Optional<String> content) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                             @RequestParam(value = "content", required = false) Optional<String> content) {
         String contentToAdd = content.isEmpty() ? null : content.get();
         Post updatedPostShare = postService.updatePostShare(contentToAdd, postShareId);
         return new ResponseEntity<>(updatedPostShare, HttpStatus.OK);
     }
 
     @PostMapping("/posts/{postShareId}/share/delete")
-    public ResponseEntity<?> deletePostShare(@PathVariable("postShareId") Long postShareId) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> deletePostShare(@PathVariable("postShareId") Long postShareId) {
         postService.deletePostShare(postShareId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -256,10 +211,7 @@ public class PostController {
     @GetMapping("/posts/tags/{tagName}")
     public ResponseEntity<?> getPostsByTag(@PathVariable("tagName") String tagName,
                                           @RequestParam("page") Integer page,
-                                          @RequestParam("size") Integer size) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                          @RequestParam("size") Integer size) {
         page = page < 0 ? 0 : page-1;
         size = size <= 0 ? 5 : size;
         Tag targetTag = tagService.getTagByName(tagName);

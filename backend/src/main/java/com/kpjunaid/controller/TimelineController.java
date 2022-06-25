@@ -23,10 +23,7 @@ public class TimelineController {
 
     @GetMapping( "/")
     public ResponseEntity<?> getTimelinePosts(@RequestParam("page") Integer page,
-                                              @RequestParam("size") Integer size) throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+                                              @RequestParam("size") Integer size) {
         page = page < 0 ? 0 : page-1;
         size = size <= 0 ? 5 : size;
         List<PostResponse> timelinePosts = postService.getTimelinePostsPaginate(page, size);
@@ -34,10 +31,7 @@ public class TimelineController {
     }
 
     @GetMapping( "/tags")
-    public ResponseEntity<?> getTimelineTags() throws InterruptedException {
-        // TODO remove thread sleep & exception
-        Thread.sleep(1000);
-
+    public ResponseEntity<?> getTimelineTags() {
         List<Tag> timelineTags = tagService.getTimelineTags();
         return new ResponseEntity<>(timelineTags, HttpStatus.OK);
     }
