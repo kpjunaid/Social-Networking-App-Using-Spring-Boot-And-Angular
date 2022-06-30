@@ -13,6 +13,9 @@
 - Posts can have text content, an image and tags.
 - Users will have timeline which will contain posts from following users.
 - Users can update profile info/email/password.
+- Users can verify their email addresses.
+- Users can reset their passwords.
+- Users will receive notifications when their posts are liked/shared/commented on.
 
 ## Technologies Used:
 
